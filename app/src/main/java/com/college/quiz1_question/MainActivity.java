@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText mShareTextEditText;
     //EditText for Dial action
     private EditText mDialEditText;
-    private String contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,16 @@ public class MainActivity extends AppCompatActivity {
         Button openLocationBtn = findViewById(R.id.open_location_button);
         Button shareTextBtn = findViewById(R.id.share_text_button);
         Button buttonCall = findViewById(R.id.dial_button);
+        Button viewContactsBtn = findViewById(R.id.call_log_button);
 
 
         //Open a URL in a browser.
         openWebsiteBtn.setOnClickListener((v)->{openWebsite(openWebsiteBtn);});
-
         openLocationBtn.setOnClickListener((v)->{openLocation(openLocationBtn);});
         shareTextBtn.setOnClickListener((v)->{ shareText(mShareTextEditText);});
 
         buttonCall.setOnClickListener((v)->{dial(mDialEditText);});
+        viewContactsBtn.setOnClickListener((v) -> { viewContact(viewContactsBtn); });
 
         /*
     It contains buttons for sending implicit intents:
@@ -140,26 +140,8 @@ public class MainActivity extends AppCompatActivity {
      * @param view The view (Button) that was clicked.
      */
     public void viewContact(View view) {
-        Intent viewContactsIntent = new Intent(Intent.ACTION_PICK);
-        viewContactsIntent.setType("");
-        requestContactsPermission();
-    }
-
-    private boolean hasContactsPermission()
-    {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) ==
-                PackageManager.PERMISSION_GRANTED;
-    }
-
-    // Request contact permission if it
-    // has not been granted already
-    private void requestContactsPermission()
-    {
-        if (!hasContactsPermission())
-        {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CONTACTS}, 0);
-        }
+        Intent viewContactsIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        this.startActivity(viewContactsIntent);
     }
 
 }
